@@ -1,0 +1,33 @@
+DefinitionBlock ("", "SSDT", 1, "JSC", "NVHACK", 0x00000002){
+
+	External(\_SB.PCI0.PEG0, DeviceObj)
+	External(\_SB.PCI0.PEG0.PEGP, DeviceObj)
+	//External(\_SB_.PCI0.S08_, DeviceObj)
+	//External(\_SB_.PCI0.S08_.S00_, DeviceObj)
+
+	External(RO%02d, MethodObj)
+	External(RO99, MethodObj)
+
+	Scope (\_SB.PCI0.PEG0.PEGP) {
+	//Scope (\_SB_.PCI0.S08_.S00_) {
+
+		Method (RO%02d, 2, NotSerialized) {
+
+			//Arg0 is offset, Arg1 is length
+
+			if(Arg0 >= %d){
+				Local2 = RO%02d(Arg0, Arg1)
+				return (Local2)
+			}
+
+			Local1 = Buffer(%d){
+			%s
+			}
+
+			CreateField(Local1, 0, Arg1*8, TMPB)
+
+			return (TMPB)
+		}
+
+	}
+}
